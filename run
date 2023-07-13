@@ -1,0 +1,5 @@
+# cao bin, HKUST, China, binjacobcao@gmail.com
+# free to charge for academic communication
+# CUDA_VISIBLE_DEVICES=0,1 python3 .code/DAN.py > result.out
+
+OMP_NUM_THREADS=20 taskset -c 0-19 python3 .code/DAN.py > result.out
