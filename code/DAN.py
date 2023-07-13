@@ -21,7 +21,8 @@ Additionally, the availability of suitable and sufficiently large datasets withi
 """
 cifar10 = tf.keras.datasets.cifar10
 (source_x_train, source_y_train), (target_x_train, _) = cifar10.load_data()
-source_x_train, target_x_train = source_x_train / 255.0, target_x_train / 255.0
+source_x_train, target_x_train = source_x_train[:10000,:,:,:] / 255.0, target_x_train / 255.0
+source_y_train = source_y_train[:10000]
 
 class DAN(Model):
     def __init__(self):
