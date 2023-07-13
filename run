@@ -1,5 +1,22 @@
-# cao bin, HKUST, China, binjacobcao@gmail.com
-# free to charge for academic communication
-# CUDA_VISIBLE_DEVICES=0,1 python3 .code/DAN.py > result.out
+#!/bin/bash
 
-OMP_NUM_THREADS=20 taskset -c 0-19 python3 .code/DAN.py > result.out
+# Set the task name
+task_name="DAN"
+
+# Set the number of cores to be used
+num_cores=4
+
+# Set the device to be used (CPU or GPU)
+device="cpu"  # Use GPU ("cuda"), change to device="cpu" if using CPU
+
+# Set other required parameters
+# ...
+
+# Execute the Python file
+echo "Running the Python file... BinCAO, HKUST, binjacobcao@gmail.com"
+CUDA_VISIBLE_DEVICES=0-$((num_cores-1)) python3 code/DAN.py > output.txt &
+
+# Get the process ID (PID) of the task and write it to a file
+echo $! > "$task_name.pid"
+
+echo "Task $task_name has been started."
