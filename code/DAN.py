@@ -151,9 +151,12 @@ target_x = target_x_train
 
 # recore the training precess
 csv_logger = CSVLogger('training_log.csv')
-history = model.fit([source_x, target_x,], source_y_train, batch_size=32, epochs=1, validation_data=([source_x, target_x,], source_y_train), callbacks=[cp_callback])
+history = model.fit([source_x, target_x,], source_y_train, batch_size=32, epochs=500, validation_data=([source_x, target_x,], source_y_train), callbacks=[cp_callback])
 
 # save the training process 
 with open('history.txt', 'w') as file:
+    # Save model summary
+    model.summary(print_fn=lambda x: file.write(x + '\n'))
+
     for key, value in history.history.items():
         file.write(f'{key}: {value}\n')
