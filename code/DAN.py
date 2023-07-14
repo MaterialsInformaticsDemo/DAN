@@ -6,6 +6,7 @@
 import os
 import numpy as np
 import tensorflow as tf
+from keras.callbacks import CSVLogger
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Conv2D, BatchNormalization, Activation, MaxPool2D, Dropout, Flatten, Dense
 from MK_MMD import MK_MMD
@@ -149,8 +150,10 @@ source_x = source_x_train
 target_x = target_x_train 
 
 # recore the training precess
+csv_logger = CSVLogger('training_log.csv')
 history = model.fit([source_x, target_x,], source_y_train, batch_size=32, epochs=1, validation_data=([source_x, target_x,], source_y_train), callbacks=[cp_callback])
 
 # save the training process 
 with open('history.txt', 'w') as file:
-    file.write(str(history.history))
+    for key, value in history.history.items():
+        file.write(f'{key}: {value}\n')
