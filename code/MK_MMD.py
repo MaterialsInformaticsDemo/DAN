@@ -6,6 +6,7 @@
 import tensorflow as tf
 
 # based on rbf kernel functions
+@tf.function
 def guassian_kernel(source, target, kernel_mul=2.0, kernel_num=5):
     # source: source domain data
     # target: target domain data
@@ -29,10 +30,11 @@ def guassian_kernel(source, target, kernel_mul=2.0, kernel_num=5):
     # define the multi-kernels
     M_kernel = [tf.exp(-L2_distance / i) for i in length_scale_list]
     # return n*n data correlation matrix
-    return sum(M_kernel)
+    return tf.reduce_sum(M_kernel, axis=0)
 
 # define the function of MK_MMD
 # solve MMD directlt, ref : TCA in my implementation : https://github.com/MaterialsInformaticsDemo/TCA
+@tf.function
 def MK_MMD(source, target, kernel_mul=2.0, kernel_num=5):
     kernels = guassian_kernel(source, target, kernel_mul=kernel_mul, kernel_num=kernel_num)
     n_s = tf.shape(source)[0]
@@ -41,5 +43,5 @@ def MK_MMD(source, target, kernel_mul=2.0, kernel_num=5):
     YY = tf.reduce_sum(kernels[-n_t:, -n_t:]) / tf.cast(n_t ** 2, tf.float32)
     XY = tf.reduce_sum(kernels[:n_s, -n_t:]) / tf.cast(n_s * n_t, tf.float32)
     YX = tf.reduce_sum(kernels[-n_t:, :n_s]) / tf.cast(n_s * n_t, tf.float32)
-    MK_MMD_loss = XX + YY - XY - YX
-    return MK_MMD_loss
+    
+    return XX + YY - XY - YX
