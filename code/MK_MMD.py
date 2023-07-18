@@ -44,4 +44,4 @@ def MK_MMD(source, target, kernel_mul=2.0, kernel_num=5):
     XY = tf.reduce_sum(kernels[:n_s, -n_t:]) / tf.cast(n_s * n_t, tf.float32)
     YX = tf.reduce_sum(kernels[-n_t:, :n_s]) / tf.cast(n_s * n_t, tf.float32)
     
-    return XX + YY - XY - YX
+    return abs(XX + YY - XY - YX)
