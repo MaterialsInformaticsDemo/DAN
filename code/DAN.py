@@ -28,9 +28,6 @@ source_y_train = source_y_train[:10000]
 class DAN(Model):
     def __init__(self):
         super(DAN, self).__init__()
-        self.weight_1 = tf.Variable(1/3, trainable=True)
-        self.weight_2 = tf.Variable(1/6, trainable=True)
-        self.weight_3 = tf.Variable(1/6, trainable=True)
 
         # def the structure of ALEXnet
         self.c1 = Conv2D(filters=96, kernel_size=(3, 3))
@@ -126,7 +123,7 @@ class DAN(Model):
         MMDloss2 = MK_MMD(source_y2, target_y2)
         MMDloss3 = MK_MMD(y_source, y_target)
 
-        self.add_loss(self.weight_1 * MMDloss1 + self.weight_2 * MMDloss2 + self.weight_3* MMDloss3)
+        self.add_loss(1/3 * MMDloss1 + 1/6 * MMDloss2 + 1/6 * MMDloss3)
     
         return y_source
 
@@ -135,7 +132,7 @@ model = DAN()
 
 # comolie the model 
 model.compile(optimizer='adam',
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['sparse_categorical_accuracy'])
 
 
